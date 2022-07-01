@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                       child: _button(
                         "Ler Código de Barras",
                         Icons.payment_sharp,
-                        (){}
+                        scanBarcode()
                       )
                     ),Container(
                       margin: const EdgeInsets.only(top: 24),
@@ -158,3 +158,19 @@ Future<void> scanQR() async {
     print(barcodeScanRes);
   }
 }
+
+Future<void> scanBarcode() async {
+    String barcodeScanRes;
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+        '#E5E5E5', 
+        'Cancel', 
+        true, 
+        ScanMode.BARCODE
+      );
+      print(barcodeScanRes);
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+      print(barcodeScanRes);
+    }
+  }
