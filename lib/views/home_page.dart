@@ -55,36 +55,57 @@ class _HomePageState extends State<HomePage> {
         ),
         backgroundColor: const Color.fromARGB(255, 229, 229, 229),
         body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  child: _button(
-                    "Ler QR Code",
-                    Icons.qr_code_scanner_outlined, 
-                    (){}
-                  )
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                children: const [
+                  Text(
+                    "Bem vindo,",
+                    style: TextStyle(
+                      fontSize: 24
+                    ),
+                  ),
+                  Text(
+                    "Usuário!",
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(32, 0, 32, 0),
+                child: Column(
+                  children: [
+                    Container(
+                      child: _button(
+                        "Ler QR Code",
+                        Icons.qr_code_scanner_outlined, 
+                        (){}
+                      )
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 24),
+                      child: _button(
+                        "Ler Código de Barras",
+                        Icons.payment_sharp,
+                        (){}
+                      )
+                    ),Container(
+                      margin: const EdgeInsets.only(top: 24),
+                      child: _button(
+                        "Resultados",
+                        Icons.view_list_sharp,
+                        (){}
+                      )
+                    ),
+                  ],
                 ),
-                Container(
-                  margin: const EdgeInsets.only(top: 24),
-                  child: _button(
-                    "Ler Código de Barras",
-                    Icons.payment_sharp,
-                    (){}
-                  )
-                ),Container(
-                  margin: const EdgeInsets.only(top: 24),
-                  child: _button(
-                    "Resultados",
-                    Icons.view_list_sharp,
-                    (){}
-                  )
-                )
-              ],
-            ),
-          )
+              ),
+            ],
+          ),
         ),
       )
     );
