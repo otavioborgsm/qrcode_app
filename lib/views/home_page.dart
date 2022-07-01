@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:async';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -83,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                       child: _button(
                         "Ler QR Code",
                         Icons.qr_code_scanner_outlined, 
-                        (){}
+                        scanQR()
                       )
                     ),
                     Container(
@@ -138,4 +141,20 @@ Widget _button( text, icon, onPressedFunction){
       ],
     ),
   );
+}
+
+Future<void> scanQR() async {
+  String barcodeScanRes;
+  try {
+    barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+      '#E5E5E5', 
+      'Cancel', 
+      true, 
+      ScanMode.QR
+    );
+    print(barcodeScanRes);
+  } on PlatformException {
+    barcodeScanRes = 'Failed to get platform version.';
+    print(barcodeScanRes);
+  }
 }
