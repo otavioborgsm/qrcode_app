@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                   Text(
                     "Usuário!",
                     style: TextStyle(
-                      fontSize: 36,
+                      fontSize: 38,
                       fontWeight: FontWeight.bold
                     ),
                   ),
@@ -117,7 +117,8 @@ Widget _button( text, icon, onPressedFunction){
     onPressed: onPressedFunction,
     style: ElevatedButton.styleFrom(
       primary: const Color.fromARGB(255, 20, 33, 61),
-      shadowColor: Colors.black,
+      shadowColor: const Color.fromARGB(255, 20, 33, 61),
+      elevation: 15.0
     ),
     child: Row(
       children: [
