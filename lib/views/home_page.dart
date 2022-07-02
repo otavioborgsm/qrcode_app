@@ -163,19 +163,19 @@ scanQR() async {
 }
 
 scanBarcode() async {
-    String barcodeScanRes;
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-        '#E5E5E5', 
-        'Cancelar', 
-        true, 
-        ScanMode.BARCODE
-      );
-      print(barcodeScanRes.toString());
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
-      print(barcodeScanRes);
-    }catch(e){
-      print(e);
-    }
+  String barcodeScanRes;
+  try {
+    barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+      '#E5E5E5', 
+      'Cancelar', 
+      true, 
+      ScanMode.BARCODE
+    );
+    print(barcodeScanRes.toString());
+  } on PlatformException {
+    barcodeScanRes = 'Failed to get platform version.';
+    print(barcodeScanRes);
+  }catch(e){
+    print(e);
   }
+}
