@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -78,14 +80,14 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(32, 0, 32, 0),
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: Column(
                   children: [
                     Container(
                       child: _button(
                         "Ler QR Code",
                         Icons.qr_code_scanner_outlined, 
-                        scanQR()
+                        scanQR
                       )
                     ),
                     Container(
@@ -93,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                       child: _button(
                         "Ler Código de Barras",
                         Icons.payment_sharp,
-                        scanBarcode()
+                        scanBarcode
                       )
                     ),Container(
                       margin: const EdgeInsets.only(top: 24),
@@ -151,7 +153,7 @@ scanQR() async {
       true, 
       ScanMode.QR
     );
-    print(barcodeScanRes);
+    print(barcodeScanRes.toString());
   } on PlatformException {
     barcodeScanRes = 'Failed to get platform version.';
     print(barcodeScanRes);
@@ -169,7 +171,7 @@ scanBarcode() async {
         true, 
         ScanMode.BARCODE
       );
-      print(barcodeScanRes);
+      print(barcodeScanRes.toString());
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
       print(barcodeScanRes);
