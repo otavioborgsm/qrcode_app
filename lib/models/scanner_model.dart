@@ -1,10 +1,10 @@
 class Scanner {
   Scanner({
-    required this.id,
+    this.id,
     required this.type,
     required this.result,
   });
-  late final int id;
+  late final int? id;
   late final String type;
   late final String result;
   

@@ -14,7 +14,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int id = 0;
 
   @override
   void initState() {
@@ -172,16 +171,13 @@ class _HomePageState extends State<HomePage> {
       );
 
       if (barcodeScanRes != "-1") {
-        id++;
-        Scanner scanner = Scanner(id: id ,type: "QR", result: barcodeScanRes.toString());
+        Scanner scanner = Scanner(type: "QR", result: barcodeScanRes.toString());
         DB.instance.create(scanner);
-
         await _buildFlushBar(
           barcodeScanRes.toString(), 
           Icons.qr_code_outlined,
           5
         );
-        print(DB.instance.read());
       } else {
         await _buildFlushBar(
           "Consulta Cancelada", 
@@ -210,8 +206,7 @@ class _HomePageState extends State<HomePage> {
       );
 
       if (barcodeScanRes != "-1") {
-        id++;
-        Scanner scanner = Scanner(id: id ,type: "BC", result: barcodeScanRes.toString());
+        Scanner scanner = Scanner(type: "BC", result: barcodeScanRes.toString());
         DB.instance.create(scanner);
 
         await _buildFlushBar(
