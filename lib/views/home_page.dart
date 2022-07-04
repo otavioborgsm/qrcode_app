@@ -5,6 +5,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:qrcode_app/db/db.dart';
 import 'package:qrcode_app/models/scanner_model.dart';
+import 'package:qrcode_app/views/result_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  DatabaseHelper db = DatabaseHelper.instance;
 
   @override
   void initState() {
@@ -98,9 +100,7 @@ class _HomePageState extends State<HomePage> {
                       child: _button(
                         "Ler QR Code",
                         Icons.qr_code_scanner_outlined, 
-                        () async {
-                          _scanQR();
-                        }
+                        _scanQR
                       )
                     ),
                     Container(
@@ -108,9 +108,7 @@ class _HomePageState extends State<HomePage> {
                       child: _button(
                         "Ler Código de Barras",
                         Icons.payment_sharp,
-                        () async {
-                          _scanBarcode();
-                        }
+                        _scanBarcode
                       )
                     ),
                     Container(
@@ -118,7 +116,9 @@ class _HomePageState extends State<HomePage> {
                       child: _button(
                         "Resultados",
                         Icons.view_list_sharp,
-                        (){}
+                        (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const ResultPage()));
+                        }
                       )
                     ),
                   ],
@@ -172,7 +172,7 @@ class _HomePageState extends State<HomePage> {
 
       if (barcodeScanRes != "-1") {
         Scanner scanner = Scanner(type: "QR", result: barcodeScanRes.toString());
-        DB.instance.create(scanner);
+        db.create(scanner);
         await _buildFlushBar(
           barcodeScanRes.toString(), 
           Icons.qr_code_outlined,
@@ -185,7 +185,6 @@ class _HomePageState extends State<HomePage> {
           3
         );
       }
-      print(barcodeScanRes.toString());
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
       print(barcodeScanRes);
@@ -207,7 +206,7 @@ class _HomePageState extends State<HomePage> {
 
       if (barcodeScanRes != "-1") {
         Scanner scanner = Scanner(type: "BC", result: barcodeScanRes.toString());
-        DB.instance.create(scanner);
+        db.create(scanner);
 
         await _buildFlushBar(
           barcodeScanRes.toString(), 
@@ -221,7 +220,6 @@ class _HomePageState extends State<HomePage> {
           3
         );
       }
-      print(barcodeScanRes.toString());
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
       print(barcodeScanRes);

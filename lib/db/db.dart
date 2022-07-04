@@ -1,10 +1,13 @@
+import 'dart:io';
+
 import 'package:qrcode_app/models/scanner_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
-class DB {
-  DB._();
-  static final DB instance = DB._();
+class DatabaseHelper {
+  DatabaseHelper._();
+  static final DatabaseHelper instance = DatabaseHelper._();
   static Database? _database;
 
   get database async {
@@ -14,24 +17,25 @@ class DB {
   }
 
   _initDatabase() async {
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentsDirectory.path, 'scanner.db');
     return await openDatabase(
-      join(await getDatabasesPath(), 'scanner.db'),
+      path,
       version: 1,
       onCreate: _onCreate,
     );
   }
 
   _onCreate(db, versao) async {
-    await db.execute(_scanner);
+    await db.execute('''
+      CREATE TABLE scanner (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        type TEXT,
+        result TEXT
+      );
+    ''');
   }
 
-  String get _scanner => '''
-    CREATE TABLE scanner (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      type TEXT,
-      result TEXT
-    );
-  ''';
 
   Future<int> create(Scanner scanner) async {
     var dbScanner = await database;
@@ -48,11 +52,15 @@ class DB {
   }
 
   Future<List<Scanner>> read() async {
-    final dbScanner = await database;
+    Database dbScanner = await instance.database;
 
     final result = await dbScanner.query("scanner");
 
-    return result.map((json) => Scanner.fromJson(json)).toList();
+    List<Scanner> listScanner = result.isNotEmpty 
+            ? result.map((json) => Scanner.fromJson(json)).toList() 
+            : [];
+
+    return listScanner;
   }
 
 }
