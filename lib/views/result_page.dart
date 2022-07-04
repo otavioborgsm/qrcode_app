@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:qrcode_app/db/db.dart';
 import 'package:qrcode_app/models/scanner_model.dart';
-import 'package:qrcode_app/views/home_page.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class ResultPage extends StatefulWidget {
   const ResultPage({super.key});
@@ -51,7 +52,10 @@ class _ResultPageState extends State<ResultPage> {
                     leading: Icon(
                       icon
                     ),
-                    title: Text(scanner.result),
+                    title: Linkify(
+                      onOpen: _onOpen,
+                      text: scanner.result,
+                    ),
                     trailing: IconButton(
                       icon: const Icon(
                         Icons.delete,
@@ -73,5 +77,13 @@ class _ResultPageState extends State<ResultPage> {
         ),
       )
     );
+  }
+
+  Future<void> _onOpen(LinkableElement link) async {
+    if (await canLaunchUrlString(link.url)) {
+      await launchUrlString(link.url);
+    } else {
+      throw 'Could not launch $link';
+    }
   }
 }
