@@ -1,5 +1,5 @@
-class ScannerRepository {
-  ScannerRepository({
+class Scanner {
+  Scanner({
     required this.id,
     required this.type,
     required this.result,
@@ -8,7 +8,7 @@ class ScannerRepository {
   late final String type;
   late final String result;
   
-  ScannerRepository.fromJson(Map<String, dynamic> json){
+  Scanner.fromJson(Map<String, dynamic> json){
     id = json['id'];
     type = json['type'];
     result = json['result'];
