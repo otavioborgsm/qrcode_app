@@ -40,6 +40,7 @@ dependencies:
   path_provider:
   sqflite:
   url_launcher: ^6.1.4
+  flutter_linkify: ^5.0.2
 
 dev_dependencies:
   flutter_test:
