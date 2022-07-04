@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qrcode_app/db/db.dart';
 import 'package:qrcode_app/models/scanner_model.dart';
+import 'package:qrcode_app/views/home_page.dart';
 
 class ResultPage extends StatefulWidget {
   const ResultPage({super.key});
@@ -14,46 +15,9 @@ class _ResultPageState extends State<ResultPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size(
-            MediaQuery.of(context).size.width,
-            150.0
-          ),
-          child: Container(
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top
-            ),
-            decoration: const BoxDecoration(
-              gradient:  LinearGradient(
-                colors: [
-                  Color.fromARGB(255, 20, 33, 61),
-                  Colors.black
-                ]
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black,
-                  blurRadius: 20.0,
-                  spreadRadius: 1.0,
-                )
-              ]
-            ),
-            child: const Padding(
-              padding: EdgeInsets.only(
-                left: 30.0,
-                top: 20.0,
-                bottom: 20.0
-              ),
-              child: Text(
-                'Resultados',
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 229, 229, 229)
-                ),
-              ),
-            ),
-          ),
+        appBar: AppBar(
+          title: const Text("Resultados"),
+          backgroundColor:const Color.fromARGB(255, 20, 33, 61),
         ),
         backgroundColor: const Color.fromARGB(255, 229, 229, 229),
         body: FutureBuilder<List<Scanner>>(
@@ -69,22 +33,42 @@ class _ResultPageState extends State<ResultPage> {
                 ),
               );
             } 
-            return snapshot.data!.isEmpty
-            ? Center(
+            if (snapshot.data!.isEmpty) {
+              return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   Text("Sem consultas na lista")
                 ],
               ),
-            )
-            : ListView(
+            );
+            } else {
+              return ListView(
               children: snapshot.data!.map((scanner){
-                return ListTile(
-                  title: Text(scanner.result),
+                var icon = scanner.type == 'QR' ? Icons.qr_code_outlined : Icons.payment;
+                return Card(
+                  child: ListTile(
+                    leading: Icon(
+                      icon
+                    ),
+                    title: Text(scanner.result),
+                    trailing: IconButton(
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                      onPressed: () {
+                        DatabaseHelper.instance.delete(scanner);
+                        setState(() {
+                          
+                        });
+                      },
+                    ),
+                  ),
                 );
               }).toList(),
             );
+            }
           }
         ),
       )
