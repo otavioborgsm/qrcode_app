@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:another_flushbar/flushbar.dart';
+import 'package:qrcode_app/db/db.dart';
+import 'package:qrcode_app/models/scanner_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,6 +14,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int id = 0;
+
   @override
   void initState() {
     super.initState();
@@ -96,7 +100,7 @@ class _HomePageState extends State<HomePage> {
                         "Ler QR Code",
                         Icons.qr_code_scanner_outlined, 
                         () async {
-                          _scanQR(context);
+                          _scanQR();
                         }
                       )
                     ),
@@ -106,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                         "Ler Código de Barras",
                         Icons.payment_sharp,
                         () async {
-                          _scanBarcode(context);
+                          _scanBarcode();
                         }
                       )
                     ),
@@ -127,115 +131,121 @@ class _HomePageState extends State<HomePage> {
       )
     );
   }
-}
-
-Widget _button(text, icon, onPressedFunction){
-  return ElevatedButton(
-    onPressed: onPressedFunction,
-    style: ElevatedButton.styleFrom(
-      primary: const Color.fromARGB(255, 20, 33, 61),
-      shadowColor: const Color.fromARGB(255, 20, 33, 61),
-      elevation: 15.0
-    ),
-    child: Row(
-      children: [
-        Icon(icon),
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            text,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.5,
+    
+  Widget _button(text, icon, onPressedFunction){
+    return ElevatedButton(
+      onPressed: onPressedFunction,
+      style: ElevatedButton.styleFrom(
+        primary: const Color.fromARGB(255, 20, 33, 61),
+        shadowColor: const Color.fromARGB(255, 20, 33, 61),
+        elevation: 15.0
+      ),
+      child: Row(
+        children: [
+          Icon(icon),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              text,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.5,
+              ),
             ),
           ),
-        ),
-      ],
-    ),
-  );
-}
-
-Future _scanQR(context) async {
-  String barcodeScanRes;
-
-  try {
-    barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-      '#E5E5E5', 
-      'Cancelar', 
-      true, 
-      ScanMode.QR
-    );
-
-    if (barcodeScanRes != "-1") {
-      await _buildFlushBar(
-        context, 
-        barcodeScanRes.toString(), 
-        Icons.qr_code_outlined,
-        5
-      );
-    } else {
-      await _buildFlushBar(
-        context, 
-        "Consulta Cancelada", 
-        Icons.error_outline,
-        3
-      );
-    }
-
-    print(barcodeScanRes.toString());
-  } on PlatformException {
-    barcodeScanRes = 'Failed to get platform version.';
-    print(barcodeScanRes);
-  }catch(e){
-    print(e);
-  }
-}
-
-Future _scanBarcode(context) async {
-  String barcodeScanRes;
-  try {
-    barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-      '#E5E5E5', 
-      'Cancelar', 
-      true,
-      ScanMode.BARCODE
-    );
-
-    if (barcodeScanRes != "-1") {
-      await _buildFlushBar(
-        context, 
-        barcodeScanRes.toString(), 
-        Icons.payment_sharp,
-        5
-      );
-    } else {
-      await _buildFlushBar(
-        context, 
-        "Consulta Cancelada", 
-        Icons.error_outline,
-        3
-      );
-    }
-    print(barcodeScanRes.toString());
-  } on PlatformException {
-    barcodeScanRes = 'Failed to get platform version.';
-    print(barcodeScanRes);
-  }catch(e){
-    print(e);
-  }
-}
-
-Future<Widget> _buildFlushBar(context, barcodeScanRes, icon, duration) async {
-  return await Flushbar(
-    icon: Icon(
-        icon,
-        color: Colors.white,
-        size: 30
+        ],
       ),
-    message: barcodeScanRes.toString(),
-    messageSize: 20,
-    duration: Duration(seconds: duration),
-  ).show(context);
+    );
+  }
+
+  Future _scanQR() async {
+    String barcodeScanRes;
+
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+        '#E5E5E5', 
+        'Cancelar', 
+        true, 
+        ScanMode.QR
+      );
+
+      if (barcodeScanRes != "-1") {
+        id++;
+        Scanner scanner = Scanner(id: id ,type: "QR", result: barcodeScanRes.toString());
+        DB.instance.create(scanner);
+
+        await _buildFlushBar(
+          barcodeScanRes.toString(), 
+          Icons.qr_code_outlined,
+          5
+        );
+        print(DB.instance.read());
+      } else {
+        await _buildFlushBar(
+          "Consulta Cancelada", 
+          Icons.error_outline,
+          3
+        );
+      }
+      print(barcodeScanRes.toString());
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+      print(barcodeScanRes);
+    }catch(e){
+      print(e);
+    }
+  }
+
+  Future _scanBarcode() async {
+    String barcodeScanRes;
+
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+        '#E5E5E5', 
+        'Cancelar', 
+        true,
+        ScanMode.BARCODE
+      );
+
+      if (barcodeScanRes != "-1") {
+        id++;
+        Scanner scanner = Scanner(id: id ,type: "BC", result: barcodeScanRes.toString());
+        DB.instance.create(scanner);
+
+        await _buildFlushBar(
+          barcodeScanRes.toString(), 
+          Icons.payment_sharp,
+          5
+        );
+      } else {
+        await _buildFlushBar( 
+          "Consulta Cancelada", 
+          Icons.error_outline,
+          3
+        );
+      }
+      print(barcodeScanRes.toString());
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+      print(barcodeScanRes);
+    }catch(e){
+      print(e);
+    }
+
+  }
+
+  Future<Widget> _buildFlushBar(barcodeScanRes, icon, duration) async {
+    return await Flushbar(
+      icon: Icon(
+          icon,
+          color: Colors.white,
+          size: 30
+        ),
+      message: barcodeScanRes.toString(),
+      messageSize: 20,
+      duration: Duration(seconds: duration),
+    ).show(context);
+  }
 }

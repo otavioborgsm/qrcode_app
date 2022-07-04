@@ -50,7 +50,7 @@ class DB {
   Future<List<Scanner>> read() async {
     final dbScanner = await database;
 
-    final result = await dbScanner.query(_scanner);
+    final result = await dbScanner.query("scanner");
 
     return result.map((json) => Scanner.fromJson(json)).toList();
   }

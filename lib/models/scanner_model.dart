@@ -15,10 +15,10 @@ class Scanner {
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['id'] = id;
-    _data['type'] = type;
-    _data['result'] = result;
-    return _data;
+    final data = <String, dynamic>{};
+    data['id'] = id;
+    data['type'] = type;
+    data['result'] = result;
+    return data;
   }
 }
