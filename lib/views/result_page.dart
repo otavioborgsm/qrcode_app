@@ -12,6 +12,9 @@ class ResultPage extends StatefulWidget {
 }
 
 class _ResultPageState extends State<ResultPage> {
+  bool listOreder = false;
+  var iconButton = Icons.arrow_upward_rounded;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -19,6 +22,19 @@ class _ResultPageState extends State<ResultPage> {
         appBar: AppBar(
           title: const Text("Resultados"),
           backgroundColor:const Color.fromARGB(255, 20, 33, 61),
+          actions: [
+            IconButton(
+              onPressed: (){
+                setState(() {
+                  listOreder = !listOreder;
+                  iconButton = listOreder ? Icons.arrow_downward_rounded : Icons.arrow_upward_rounded;
+                });
+              }, 
+              icon: Icon(
+                iconButton,
+              )
+            )
+          ],
         ),
         backgroundColor: const Color.fromARGB(255, 229, 229, 229),
         body: FutureBuilder<List<Scanner>>(
@@ -45,33 +61,43 @@ class _ResultPageState extends State<ResultPage> {
             );
             } else {
               return ListView(
-              children: snapshot.data!.map((scanner){
-                var icon = scanner.type == 'QR' ? Icons.qr_code_outlined : Icons.payment;
-                return Card(
-                  child: ListTile(
-                    leading: Icon(
-                      icon
-                    ),
-                    title: Linkify(
-                      onOpen: _onOpen,
-                      text: scanner.result,
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
+                reverse: listOreder,
+                children: snapshot.data!.map((scanner){
+                  var icon = scanner.type == 'QR' ? Icons.qr_code_outlined : Icons.payment;
+                  return Card(
+                    child: ListTile(
+                      leading: Icon(
+                        icon
                       ),
-                      onPressed: () {
-                        DatabaseHelper.instance.delete(scanner);
-                        setState(() {
-                          
-                        });
-                      },
+                      title: Row(
+                        children: [
+                          Text(
+                            "${scanner.id}: ",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600
+                            ),
+                          ),
+                          Linkify(
+                            onOpen: _onOpen,
+                            text: scanner.result,
+                          ),
+                        ],
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(
+                          Icons.delete,
+                        ),
+                        onPressed: () {
+                          DatabaseHelper.instance.delete(scanner);
+                          setState(() {
+                            
+                          });
+                        },
+                      ),
                     ),
-                  ),
-                );
-              }).toList(),
-            );
+                  );
+                }).toList(),
+              );
             }
           }
         ),
