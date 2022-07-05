@@ -16,7 +16,7 @@ Professor: [Ramon Lummertz](https://github.com/ramonsl)
 * [flutter_linkify](https://pub.dev/packages/flutter_linkify)
 
 ## Getting Started
-
+[home_screen](https://github.com/otavioborgsm/qrcode_app/blob/master/images/screens/tela_1.png)[scanner_screen](https://github.com/otavioborgsm/qrcode_app/blob/master/images/screens/tela_2.png)[home_screen_with_flushbar](https://github.com/otavioborgsm/qrcode_app/blob/master/images/screens/tela_3.png)[result_screen](https://github.com/otavioborgsm/qrcode_app/blob/master/images/screens/tela_4.png)
 This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:
