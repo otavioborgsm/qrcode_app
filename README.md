@@ -1,6 +1,19 @@
-# qrcode_app
-
-A new Flutter project.
+# myScanner: QR code e Código de Barras
+![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)![IOS](https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=ios&logoColor=white)
+>
+Aplicativo em Flutter que lê QR code's e Códigos de Barra, mantém os resultados utilizando o banco SQLite e apresenta eles para o cliente por meio de Flushbar. O app também apresenta uma tela de resultados, onde todos os itens escaneados são listados e podem ser deletados.
+>
+Autores: [Mateus Paulart](https://github.com/Mateusp23) e [Otávio Borges](https://www.linkedin.com/in/otavioborgsm/)
+>
+Professor: [Ramon Lummertz](https://github.com/ramonsl)
+### Pacotes Utilizados:
+* [flutter_barcode_scanner](https://pub.dev/packages/flutter_barcode_scanner)
+* [another_flushbar](https://pub.dev/packages/another_flushbar)
+* [path](https://pub.dev/packages/path)
+* [path_provider](https://pub.dev/packages/path_provider)
+* [sqflite](https://pub.dev/packages/sqflite)
+* [url_launcher](https://pub.dev/packages/url_launcher)
+* [flutter_linkify](https://pub.dev/packages/flutter_linkify)
 
 ## Getting Started
 
