@@ -2,10 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:another_flushbar/flushbar.dart';
 import 'package:qrcode_app/db/db.dart';
 import 'package:qrcode_app/models/scanner_model.dart';
 import 'package:qrcode_app/views/result_page.dart';
+import '../widgets/flushbar.dart';
+import '../widgets/home_button.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -97,23 +98,27 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   children: [
                     Container(
-                      child: _button(
+                      child: button(
                         "Ler QR Code",
                         Icons.qr_code_scanner_outlined, 
-                        _scanQR
+                        (){
+                          _scanQR(context);
+                        }
                       )
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 24),
-                      child: _button(
+                      child: button(
                         "Ler Código de Barras",
                         Icons.payment_sharp,
-                        _scanBarcode
+                        (){
+                          _scanBarcode(context);
+                        }
                       )
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 24),
-                      child: _button(
+                      child: button(
                         "Resultados",
                         Icons.view_list_sharp,
                         (){
@@ -130,36 +135,8 @@ class _HomePageState extends State<HomePage> {
       )
     );
   }
-    
-  Widget _button(text, icon, onPressedFunction){
-    return ElevatedButton(
-      onPressed: onPressedFunction,
-      style: ElevatedButton.styleFrom(
-        primary: const Color.fromARGB(255, 20, 33, 61),
-        shadowColor: const Color.fromARGB(255, 20, 33, 61),
-        elevation: 15.0
-      ),
-      child: Row(
-        children: [
-          Icon(icon),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              text,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.5,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
-  Future _scanQR() async {
+  Future _scanQR(context) async {
     String barcodeScanRes;
 
     try {
@@ -173,13 +150,15 @@ class _HomePageState extends State<HomePage> {
       if (barcodeScanRes != "-1") {
         Scanner scanner = Scanner(type: "QR", result: barcodeScanRes.toString());
         db.create(scanner);
-        await _buildFlushBar(
+        await buildFlushBar(
+          context,
           barcodeScanRes.toString(), 
           Icons.qr_code_outlined,
           5
         );
       } else {
-        await _buildFlushBar(
+        await buildFlushBar(
+          context,
           "Consulta Cancelada", 
           Icons.error_outline,
           3
@@ -193,7 +172,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future _scanBarcode() async {
+  Future _scanBarcode(context) async {
     String barcodeScanRes;
 
     try {
@@ -208,13 +187,15 @@ class _HomePageState extends State<HomePage> {
         Scanner scanner = Scanner(type: "BC", result: barcodeScanRes.toString());
         db.create(scanner);
 
-        await _buildFlushBar(
+        await buildFlushBar(
+          context,
           barcodeScanRes.toString(), 
           Icons.payment_sharp,
           5
         );
       } else {
-        await _buildFlushBar( 
+        await buildFlushBar(
+          context, 
           "Consulta Cancelada", 
           Icons.error_outline,
           3
@@ -229,16 +210,4 @@ class _HomePageState extends State<HomePage> {
 
   }
 
-  Future<Widget> _buildFlushBar(barcodeScanRes, icon, duration) async {
-    return await Flushbar(
-      icon: Icon(
-          icon,
-          color: Colors.white,
-          size: 30
-        ),
-      message: barcodeScanRes.toString(),
-      messageSize: 20,
-      duration: Duration(seconds: duration),
-    ).show(context);
-  }
 }

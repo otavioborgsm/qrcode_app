@@ -1,9 +1,9 @@
 import 'dart:io';
-
-import 'package:qrcode_app/models/scanner_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+
+import '../models/scanner_model.dart';
 
 class DatabaseHelper {
   DatabaseHelper._();
@@ -36,7 +36,6 @@ class DatabaseHelper {
     ''');
   }
 
-
   Future<int> create(Scanner scanner) async {
     var dbScanner = await database;
     int response = await dbScanner.insert("scanner", scanner.toJson());
@@ -44,11 +43,11 @@ class DatabaseHelper {
   }
 
   Future<int> delete(Scanner scanner) async {
-      var dbScanner = await database;
+    var dbScanner = await database;
 
-      int result =
-          await dbScanner.rawDelete('DELETE FROM scanner WHERE id = ?', [scanner.id]);
-      return result;
+    int result =
+        await dbScanner.rawDelete('DELETE FROM scanner WHERE id = ?', [scanner.id]);
+    return result;
   }
 
   Future<List<Scanner>> read() async {
